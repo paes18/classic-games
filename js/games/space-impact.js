@@ -245,7 +245,7 @@ class SpaceImpactGame {
     }
 
     ctx.font = '16px "VT323", monospace';
-    ctx.fillText(`SCORE:${this.score} LIVES:${'♥'.repeat(Math.max(0, this.player.lives))}`, 8, 20);
+    ctx.fillText(`SCORE:${this.score} HP:${Math.max(0, this.player.lives)}`, 8, 20);
 
     if (this.gameOver) {
       ctx.fillStyle = pixelColor;

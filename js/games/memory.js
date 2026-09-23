@@ -5,7 +5,7 @@ class MemoryGame {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.onGameOver = onGameOver;
-    this.icons = ['🐍', '🚀', '🔴', '⬇️', '🧩', '🏎️'];
+    this.icons = ['[A]', '[B]', '[C]', '[X]', '[Y]', '[Z]'];
     this.reset();
   }
 

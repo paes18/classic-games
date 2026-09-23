@@ -167,9 +167,9 @@ class RapidRollGame {
         }
       } else if (p.type === 'heart') {
         ctx.fillRect(p.x, p.y, p.w, p.h);
-        // Heart icon on platform
         ctx.fillStyle = bgColor;
-        ctx.fillText('♥', p.x + p.w / 2 - 4, p.y + 7);
+        ctx.font = '10px "VT323", monospace';
+        ctx.fillText('+HP', p.x + p.w / 2 - 8, p.y + 7);
         ctx.fillStyle = pixelColor;
       }
     });
@@ -181,7 +181,7 @@ class RapidRollGame {
 
     // HUD Header
     ctx.font = '16px "VT323", monospace';
-    ctx.fillText(`RAPID ROLL PTS:${this.score} LIVES:${'♥'.repeat(this.ball.lives)}`, 6, 26);
+    ctx.fillText(`RAPID ROLL PTS:${this.score} HP:${Math.max(0, this.ball.lives)}`, 6, 26);
 
     if (this.gameOver) {
       ctx.fillStyle = pixelColor;

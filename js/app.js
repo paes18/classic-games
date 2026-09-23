@@ -21,16 +21,16 @@ class NokiaApp {
     this.menuIndex = 0;
 
     this.games = [
-      { id: 'snake', name: 'Snake II', icon: '🐍' },
-      { id: 'space-impact', name: 'Space Impact', icon: '🚀' },
-      { id: 'bounce', name: 'Bounce', icon: '🔴' },
-      { id: 'rapid-roll', name: 'Rapid Roll', icon: '⬇️' },
-      { id: 'stacker', name: 'Block Cascade', icon: '🧩' },
-      { id: 'racer', name: 'Pocket Racer', icon: '🏎️' },
-      { id: 'tictactoe', name: 'Tic-Tac-Toe', icon: '❌' },
-      { id: 'memory', name: 'Memory Pairs', icon: '🎴' },
-      { id: 'scores', name: 'High Scores', icon: '🏆' },
-      { id: 'settings', name: 'Phone Settings', icon: '⚙️' }
+      { id: 'snake', name: 'Snake II', icon: '[SNK]' },
+      { id: 'space-impact', name: 'Space Impact', icon: '[SPC]' },
+      { id: 'bounce', name: 'Bounce', icon: '[BNC]' },
+      { id: 'rapid-roll', name: 'Rapid Roll', icon: '[RLL]' },
+      { id: 'stacker', name: 'Block Cascade', icon: '[BLK]' },
+      { id: 'racer', name: 'Pocket Racer', icon: '[RAC]' },
+      { id: 'tictactoe', name: 'Tic-Tac-Toe', icon: '[X-O]' },
+      { id: 'memory', name: 'Memory Pairs', icon: '[MEM]' },
+      { id: 'scores', name: 'High Scores', icon: '[SCR]' },
+      { id: 'settings', name: 'Settings', icon: '[SET]' }
     ];
 
     this.currentGame = null;
