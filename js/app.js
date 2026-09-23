@@ -1,4 +1,4 @@
-/* Nokia Retro Operating System & Application Manager - Bug Free */
+/* Nokia Retro Operating System & Application Manager - Fixed Speeds & Clean Screens */
 
 class NokiaApp {
   constructor() {
@@ -36,6 +36,9 @@ class NokiaApp {
     this.currentGame = null;
     this.keysPressed = {};
     this.highScores = this.loadScores();
+    this.lastFrameTime = 0;
+    this.targetFPS = 60;
+    this.frameInterval = 1000 / this.targetFPS;
 
     this.initClock();
     this.initEventListeners();
@@ -81,7 +84,7 @@ class NokiaApp {
       setTimeout(() => {
         startup.classList.remove('active');
         this.openMenu();
-      }, 2000);
+      }, 1800);
     } else {
       this.openMenu();
     }
@@ -90,6 +93,11 @@ class NokiaApp {
   openMenu() {
     this.activeScreen = 'menu';
     this.currentGame = null;
+
+    // Clear Canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.canvas.classList.remove('active');
+
     this.renderMenu();
     this.startLoop();
   }
@@ -102,7 +110,7 @@ class NokiaApp {
     this.games.forEach((item, idx) => {
       const div = document.createElement('div');
       div.className = `menu-item ${idx === this.menuIndex ? 'selected' : ''}`;
-      div.innerHTML = `<span class="icon">${item.icon}</span> <span>${item.name}</span>`;
+      div.innerHTML = `<span class="icon">${item.icon}</span> <span class="name">${item.name}</span>`;
       div.addEventListener('click', () => {
         this.menuIndex = idx;
         this.selectMenuItem();
@@ -122,8 +130,10 @@ class NokiaApp {
 
     if (item.id === 'scores') {
       this.activeScreen = 'scores';
+      this.canvas.classList.remove('active');
     } else if (item.id === 'settings') {
       this.activeScreen = 'settings';
+      this.canvas.classList.remove('active');
     } else {
       this.launchGame(item.id);
     }
@@ -131,6 +141,9 @@ class NokiaApp {
 
   launchGame(gameId) {
     this.activeScreen = 'game';
+    this.canvas.classList.add('active');
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     const onOver = (score) => {
       this.saveScore(gameId, score);
     };
@@ -225,7 +238,6 @@ class NokiaApp {
       this.keysPressed[e.key] = false;
     });
 
-    // Touch and Mouse button handlers
     document.querySelectorAll('.ctrl-btn').forEach(btn => {
       const key = btn.dataset.key;
       const handlePress = (e) => {
@@ -240,7 +252,6 @@ class NokiaApp {
       btn.addEventListener('pointerleave', handleRelease);
     });
 
-    // Theme Switcher Buttons
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
@@ -260,8 +271,12 @@ class NokiaApp {
 
   startLoop() {
     const loop = (timestamp) => {
-      this.update(timestamp);
-      this.render();
+      const elapsed = timestamp - this.lastFrameTime;
+      if (elapsed >= this.frameInterval) {
+        this.lastFrameTime = timestamp - (elapsed % this.frameInterval);
+        this.update(timestamp);
+        this.render();
+      }
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
@@ -302,7 +317,7 @@ class NokiaApp {
       const score = this.highScores[g.id] || 0;
       const row = document.createElement('div');
       row.className = 'menu-item';
-      row.innerHTML = `<span>${g.icon} ${g.name}</span><span style="margin-left:auto; font-weight:bold;">${score}</span>`;
+      row.innerHTML = `<span class="icon">${g.icon}</span> <span class="name">${g.name}</span> <span style="margin-left:auto; font-weight:bold;">${score}</span>`;
       container.appendChild(row);
     });
   }

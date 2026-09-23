@@ -14,7 +14,7 @@ class RacerGame {
     this.playerY = this.canvas.height - 40;
     this.carW = 24;
     this.carH = 36;
-    this.speed = 4;
+    this.speed = 2.2;
 
     this.traffic = [];
     this.coins = [];
@@ -47,14 +47,14 @@ class RacerGame {
 
     // Spawn traffic cars
     this.spawnTimer++;
-    if (this.spawnTimer > 35) {
+    if (this.spawnTimer > 55) {
       this.spawnTimer = 0;
       const lane = Math.floor(Math.random() * 3);
       if (Math.random() < 0.75) {
         this.traffic.push({
           lane: lane,
           y: -50,
-          speed: 2 + Math.random() * 2
+          speed: 1.0 + Math.random()
         });
       } else {
         this.coins.push({

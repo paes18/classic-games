@@ -1,4 +1,4 @@
-/* Nokia Retro Arcade - Clean Modern Layout CSS */
+/* Nokia Retro Arcade - Fixed CSS Layout & Solid Layers */
 
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=Outfit:wght@400;600;800&display=swap');
 
@@ -6,30 +6,28 @@
   /* Default Theme: Nokia 3310 Monochromatic LCD Green */
   --lcd-bg: #97ba30;
   --lcd-pixel: #1a3409;
-  --lcd-pixel-dim: rgba(26, 52, 9, 0.2);
+  --lcd-pixel-dim: rgba(26, 52, 9, 0.25);
   --panel-bg: #1e293b;
   --accent-blue: #38bdf8;
   --accent-pink: #f43f5e;
-  --btn-bg: linear-gradient(145deg, #334155, #1e293b);
-  --btn-border: #475569;
 }
 
 body.theme-color {
   --lcd-bg: #0f172a;
   --lcd-pixel: #38bdf8;
-  --lcd-pixel-dim: rgba(56, 189, 248, 0.2);
+  --lcd-pixel-dim: rgba(56, 189, 248, 0.25);
 }
 
 body.theme-amber {
   --lcd-bg: #ff9900;
   --lcd-pixel: #2b1400;
-  --lcd-pixel-dim: rgba(43, 20, 0, 0.2);
+  --lcd-pixel-dim: rgba(43, 20, 0, 0.25);
 }
 
 body.theme-ngage {
   --lcd-bg: #090d16;
   --lcd-pixel: #10b981;
-  --lcd-pixel-dim: rgba(16, 185, 129, 0.2);
+  --lcd-pixel-dim: rgba(16, 185, 129, 0.25);
 }
 
 * {
@@ -118,7 +116,7 @@ body {
   width: 100%;
 }
 
-/* SCREEN CANVAS HOUSING (No Phone Shell) */
+/* SCREEN CANVAS HOUSING */
 .screen-housing {
   background: #0f172a;
   padding: 12px;
@@ -150,11 +148,11 @@ body {
   display: block;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%);
   background-size: 100% 4px;
-  z-index: 10;
+  z-index: 100;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* LCD Status Bar */
@@ -163,13 +161,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 4px 10px;
-  background: rgba(0,0,0,0.1);
+  background: var(--lcd-bg);
   border-bottom: 2px solid var(--lcd-pixel-dim);
   font-family: 'VT323', monospace;
   color: var(--lcd-pixel);
   font-size: 1.15rem;
-  height: 30px;
-  z-index: 5;
+  height: 32px;
+  z-index: 50;
+  position: relative;
 }
 
 .status-left, .status-right {
@@ -185,27 +184,34 @@ body {
   margin-right: 1px;
 }
 
-/* SCREEN VIEWPORT */
+/* SCREEN VIEWPORT CONTAINER */
 .screen-viewport {
   flex: 1;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  background-color: var(--lcd-bg);
 }
 
+/* CANVAS ELEMENT FOR GAMES */
 canvas#gameCanvas {
-  display: block;
+  display: none;
   background: transparent;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 10;
 }
 
-/* NOKIA UI SCREENS */
+canvas#gameCanvas.active {
+  display: block;
+}
+
+/* NOKIA UI SCREENS (Solid background overlay) */
 .nokia-screen {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -214,7 +220,8 @@ canvas#gameCanvas {
   padding: 12px;
   font-family: 'VT323', monospace;
   color: var(--lcd-pixel);
-  z-index: 4;
+  background-color: var(--lcd-bg);
+  z-index: 30;
 }
 
 .nokia-screen.active {
@@ -238,12 +245,13 @@ canvas#gameCanvas {
 /* Nokia Menu Screen */
 .menu-header {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: bold;
   border-bottom: 2px dashed var(--lcd-pixel);
   padding-bottom: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .menu-list {
@@ -251,19 +259,33 @@ canvas#gameCanvas {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-right: 2px;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+/* Custom Scrollbar for Menu */
+.menu-list::-webkit-scrollbar {
+  width: 6px;
+}
+.menu-list::-webkit-scrollbar-track {
+  background: var(--lcd-pixel-dim);
+  border-radius: 3px;
+}
+.menu-list::-webkit-scrollbar-thumb {
+  background: var(--lcd-pixel);
+  border-radius: 3px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
+  gap: 12px;
+  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1.35rem;
   transition: all 0.1s ease;
+  line-height: 1.2;
 }
 
 .menu-item.selected {
@@ -273,21 +295,26 @@ canvas#gameCanvas {
 }
 
 .menu-item .icon {
-  font-size: 1.3rem;
-  width: 26px;
-  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  min-width: 50px;
+}
+
+.menu-item .name {
+  flex: 1;
 }
 
 .soft-keys-label {
   display: flex;
   justify-content: space-between;
-  padding: 6px 6px 0 6px;
-  font-size: 1.15rem;
-  border-top: 1px solid var(--lcd-pixel-dim);
+  padding: 8px 6px 2px 6px;
+  font-size: 1.2rem;
+  border-top: 2px solid var(--lcd-pixel-dim);
   font-weight: bold;
 }
 
-/* CLEAN MODERN TOUCH CONTROLLER (No Phone Shell) */
+/* CLEAN MODERN TOUCH CONTROLLER */
 .controls-housing {
   background: #1e293b;
   border: 1px solid #334155;

@@ -32,7 +32,7 @@ class StackerGame {
     this.level = 1;
     this.dropCounter = 0;
     this.dropInterval = 800; // ms
-    this.lastTime = 0;
+    this.lastTime = performance.now();
     this.gameOver = false;
 
     this.currentPiece = this.spawnPiece();

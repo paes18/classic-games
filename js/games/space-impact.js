@@ -14,7 +14,7 @@ class SpaceImpactGame {
       y: this.canvas.height / 2 - 10,
       w: 20,
       h: 14,
-      speed: 4,
+      speed: 2.5,
       lives: 3
     };
 
@@ -55,7 +55,7 @@ class SpaceImpactGame {
       this.bullets.push({
         x: this.player.x + this.player.w,
         y: this.player.y + this.player.h / 2,
-        speed: 7
+        speed: 5
       });
       window.nokiaAudio.playShootSFX();
     }
@@ -66,14 +66,14 @@ class SpaceImpactGame {
 
     // Spawn enemies
     this.spawnTimer++;
-    if (this.spawnTimer > 40 && !this.boss) {
+    if (this.spawnTimer > 65 && !this.boss) {
       this.spawnTimer = 0;
       this.enemies.push({
         x: this.canvas.width + 10,
         y: Math.random() * (this.canvas.height - 50) + 20,
         w: 18,
         h: 14,
-        speed: 2 + Math.random(),
+        speed: 1.2 + Math.random() * 0.5,
         hp: 1
       });
     }

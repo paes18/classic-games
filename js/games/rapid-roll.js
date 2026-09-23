@@ -14,16 +14,16 @@ class RapidRollGame {
       y: 50,
       r: 6,
       vx: 0,
-      speed: 4,
+      speed: 2.5,
       lives: 3
     };
 
     this.platforms = [];
-    this.scrollSpeed = 1.5;
+    this.scrollSpeed = 1.0;
     this.spawnTimer = 0;
     this.score = 0;
     this.gameOver = false;
-    this.gravity = 0.4;
+    this.gravity = 0.25;
     this.vy = 0;
 
     // Initial platforms

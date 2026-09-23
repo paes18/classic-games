@@ -26,7 +26,7 @@ class SnakeGame {
     this.bonusTimer = 0;
     this.score = 0;
     this.moveTimer = 0;
-    this.moveSpeed = 100; // ms
+    this.moveSpeed = 150; // ms (classic comfortable speed)
     this.lastTime = performance.now();
     this.gameOver = false;
   }

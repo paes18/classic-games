@@ -18,9 +18,9 @@ class BounceGame {
       onGround: false
     };
 
-    this.gravity = 0.45;
-    this.jumpForce = -7.5;
-    this.speed = 3;
+    this.gravity = 0.3;
+    this.jumpForce = -6.0;
+    this.speed = 2.2;
     this.score = 0;
     this.ringsCollected = 0;
     this.totalRings = 5;
