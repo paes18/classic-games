@@ -1,4 +1,4 @@
-/* Space Impact Classic Nokia Game */
+/* Space Impact Classic Nokia Game - Bug Free */
 
 class SpaceImpactGame {
   constructor(canvas, onGameOver) {
@@ -12,8 +12,8 @@ class SpaceImpactGame {
     this.player = {
       x: 20,
       y: this.canvas.height / 2 - 10,
-      w: 18,
-      h: 12,
+      w: 20,
+      h: 14,
       speed: 4,
       lives: 3
     };
@@ -21,17 +21,15 @@ class SpaceImpactGame {
     this.bullets = [];
     this.enemies = [];
     this.enemyBullets = [];
-    this.particles = [];
     this.score = 0;
     this.spawnTimer = 0;
     this.gameOver = false;
     this.boss = null;
-    this.level = 1;
   }
 
   handleInput(key) {
     if (this.gameOver) return;
-    if (key === 'SELECT' || key === '5' || key === 'SPACE') {
+    if (key === 'SELECT' || key === '5' || key === 'SPACE' || key === 'ENTER') {
       this.shoot();
     }
   }
@@ -42,7 +40,7 @@ class SpaceImpactGame {
       this.player.y = Math.max(10, this.player.y - this.player.speed);
     }
     if (keysPressed['DOWN'] || keysPressed['8'] || keysPressed['s']) {
-      this.player.y = Math.min(this.canvas.height - 20, this.player.y + this.player.speed);
+      this.player.y = Math.min(this.canvas.height - 24, this.player.y + this.player.speed);
     }
     if (keysPressed['LEFT'] || keysPressed['4'] || keysPressed['a']) {
       this.player.x = Math.max(10, this.player.x - this.player.speed);
@@ -68,21 +66,20 @@ class SpaceImpactGame {
 
     // Spawn enemies
     this.spawnTimer++;
-    if (this.spawnTimer > 45 && !this.boss) {
+    if (this.spawnTimer > 40 && !this.boss) {
       this.spawnTimer = 0;
       this.enemies.push({
         x: this.canvas.width + 10,
-        y: Math.random() * (this.canvas.height - 40) + 20,
-        w: 16,
-        h: 12,
+        y: Math.random() * (this.canvas.height - 50) + 20,
+        w: 18,
+        h: 14,
         speed: 2 + Math.random(),
-        type: Math.random() > 0.5 ? 1 : 2,
         hp: 1
       });
     }
 
-    // Spawn Boss at 200 points
-    if (this.score >= 200 && !this.boss) {
+    // Spawn Boss at 150 points
+    if (this.score >= 150 && !this.boss) {
       this.boss = {
         x: this.canvas.width - 50,
         y: this.canvas.height / 2 - 25,
@@ -90,11 +87,11 @@ class SpaceImpactGame {
         h: 50,
         speed: 1.5,
         dir: 1,
-        hp: 30
+        hp: 25
       };
     }
 
-    // Update Boss
+    // Boss movement
     if (this.boss) {
       this.boss.y += this.boss.speed * this.boss.dir;
       if (this.boss.y <= 15 || this.boss.y >= this.canvas.height - 65) {
@@ -109,16 +106,23 @@ class SpaceImpactGame {
       }
     }
 
-    // Update Player Bullets
-    this.bullets.forEach((b, i) => {
+    // Update Player Bullets (backwards loop)
+    for (let bi = this.bullets.length - 1; bi >= 0; bi--) {
+      const b = this.bullets[bi];
       b.x += b.speed;
-      if (b.x > this.canvas.width) this.bullets.splice(i, 1);
-    });
+      if (b.x > this.canvas.width) {
+        this.bullets.splice(bi, 1);
+      }
+    }
 
-    // Update Enemy Bullets
-    this.enemyBullets.forEach((eb, i) => {
+    // Update Enemy Bullets (backwards loop)
+    for (let ebi = this.enemyBullets.length - 1; ebi >= 0; ebi--) {
+      const eb = this.enemyBullets[ebi];
       eb.x -= eb.speed;
-      if (eb.x < 0) this.enemyBullets.splice(i, 1);
+      if (eb.x < 0) {
+        this.enemyBullets.splice(ebi, 1);
+        continue;
+      }
 
       // Hit Player
       if (
@@ -127,27 +131,27 @@ class SpaceImpactGame {
         eb.y < this.player.y + this.player.h &&
         eb.y + 4 > this.player.y
       ) {
-        this.enemyBullets.splice(i, 1);
+        this.enemyBullets.splice(ebi, 1);
         this.playerHit();
       }
-    });
+    }
 
-    // Update Enemies
-    this.enemies.forEach((e, i) => {
+    // Update Enemies (backwards loop)
+    for (let ei = this.enemies.length - 1; ei >= 0; ei--) {
+      const e = this.enemies[ei];
       e.x -= e.speed;
-      if (e.x < -20) this.enemies.splice(i, 1);
-
-      // Enemy shoot
-      if (Math.random() < 0.015) {
-        this.enemyBullets.push({
-          x: e.x,
-          y: e.y + e.h / 2,
-          speed: 3
-        });
+      if (e.x < -20) {
+        this.enemies.splice(ei, 1);
+        continue;
       }
 
-      // Check Bullet Collisions
-      this.bullets.forEach((b, bi) => {
+      if (Math.random() < 0.015) {
+        this.enemyBullets.push({ x: e.x, y: e.y + e.h / 2, speed: 3 });
+      }
+
+      // Check bullet collisions
+      for (let bi = this.bullets.length - 1; bi >= 0; bi--) {
+        const b = this.bullets[bi];
         if (
           b.x < e.x + e.w &&
           b.x + 6 > e.x &&
@@ -159,26 +163,28 @@ class SpaceImpactGame {
           if (e.hp <= 0) {
             this.score += 15;
             window.nokiaAudio.playHitSFX();
-            this.enemies.splice(i, 1);
+            this.enemies.splice(ei, 1);
+            break;
           }
         }
-      });
+      }
 
-      // Check Player Collision
+      // Check player collision
       if (
         e.x < this.player.x + this.player.w &&
         e.x + e.w > this.player.x &&
         e.y < this.player.y + this.player.h &&
         e.y + e.h > this.player.y
       ) {
-        this.enemies.splice(i, 1);
+        this.enemies.splice(ei, 1);
         this.playerHit();
       }
-    });
+    }
 
     // Boss Bullet Collision
     if (this.boss) {
-      this.bullets.forEach((b, bi) => {
+      for (let bi = this.bullets.length - 1; bi >= 0; bi--) {
+        const b = this.bullets[bi];
         if (
           b.x < this.boss.x + this.boss.w &&
           b.x + 6 > this.boss.x &&
@@ -192,9 +198,10 @@ class SpaceImpactGame {
             this.score += 200;
             this.boss = null;
             window.nokiaAudio.playPointSFX();
+            break;
           }
         }
-      });
+      }
     }
   }
 
@@ -213,30 +220,23 @@ class SpaceImpactGame {
 
     ctx.fillStyle = pixelColor;
 
-    // Draw Player Spaceship
-    ctx.fillRect(this.player.x, this.player.y + 4, this.player.w, 4);
-    ctx.fillRect(this.player.x + 4, this.player.y, 8, 12);
-    ctx.fillRect(this.player.x + 12, this.player.y + 2, 6, 8);
+    // Player
+    ctx.fillRect(this.player.x, this.player.y + 4, this.player.w, 6);
+    ctx.fillRect(this.player.x + 4, this.player.y, 10, 14);
 
-    // Draw Player Bullets
-    this.bullets.forEach(b => {
-      ctx.fillRect(b.x, b.y - 1, 6, 2);
-    });
+    // Bullets
+    this.bullets.forEach(b => ctx.fillRect(b.x, b.y - 1, 6, 2));
+    this.enemyBullets.forEach(eb => ctx.fillRect(eb.x, eb.y, 4, 2));
 
-    // Draw Enemy Bullets
-    this.enemyBullets.forEach(eb => {
-      ctx.fillRect(eb.x, eb.y, 4, 2);
-    });
-
-    // Draw Enemies
+    // Enemies
     this.enemies.forEach(e => {
       ctx.fillRect(e.x, e.y, e.w, e.h);
       ctx.fillStyle = bgColor;
-      ctx.fillRect(e.x + 4, e.y + 3, 4, 4);
+      ctx.fillRect(e.x + 4, e.y + 4, 4, 4);
       ctx.fillStyle = pixelColor;
     });
 
-    // Draw Boss
+    // Boss
     if (this.boss) {
       ctx.fillRect(this.boss.x, this.boss.y, this.boss.w, this.boss.h);
       ctx.fillStyle = bgColor;
@@ -244,19 +244,18 @@ class SpaceImpactGame {
       ctx.fillStyle = pixelColor;
     }
 
-    // HUD Header
     ctx.font = '16px "VT323", monospace';
-    ctx.fillText(`SCORE:${this.score} LIVES:${'♥'.repeat(this.player.lives)}`, 6, 16);
+    ctx.fillText(`SCORE:${this.score} LIVES:${'♥'.repeat(Math.max(0, this.player.lives))}`, 8, 20);
 
     if (this.gameOver) {
       ctx.fillStyle = pixelColor;
-      ctx.fillRect(20, 90, this.canvas.width - 40, 50);
+      ctx.fillRect(20, 110, this.canvas.width - 40, 50);
       ctx.fillStyle = bgColor;
       ctx.font = '20px "VT323", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('GAME OVER!', this.canvas.width / 2, 115);
+      ctx.fillText('GAME OVER!', this.canvas.width / 2, 132);
       ctx.font = '14px "VT323", monospace';
-      ctx.fillText(`SCORE: ${this.score}`, this.canvas.width / 2, 132);
+      ctx.fillText(`SCORE: ${this.score}`, this.canvas.width / 2, 148);
       ctx.textAlign = 'left';
     }
   }

@@ -15,7 +15,7 @@ class NokiaAudio {
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
   }
 
@@ -28,7 +28,7 @@ class NokiaAudio {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
-      osc.type = type; // square gives iconic retro chip sound
+      osc.type = type;
       osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
 
       gain.gain.setValueAtTime(gainVal * this.volume, this.ctx.currentTime);
@@ -39,58 +39,33 @@ class NokiaAudio {
 
       osc.start();
       osc.stop(this.ctx.currentTime + duration);
-    } catch (e) {
-      console.warn("Audio play error:", e);
-    }
+    } catch (e) {}
   }
 
-  playKeyBeep() {
-    this.playTone(1200, 'square', 0.03, 0.1);
-  }
+  playKeyBeep() { this.playTone(1200, 'square', 0.03, 0.1); }
+  playSelectBeep() { this.playTone(1600, 'square', 0.06, 0.15); }
+  playBackBeep() { this.playTone(800, 'square', 0.05, 0.12); }
 
-  playSelectBeep() {
-    this.playTone(1600, 'square', 0.06, 0.15);
-  }
-
-  playBackBeep() {
-    this.playTone(800, 'square', 0.05, 0.12);
-  }
-
-  /* Authentic Monophonic Nokia Tune Startup Melody */
   playNokiaTune() {
     if (!this.enabled) return;
     this.init();
     
-    // Notes & durations (in seconds)
     const notes = [
-      { f: 1318.51, d: 0.15 }, // E6
-      { f: 1174.66, d: 0.15 }, // D6
-      { f: 739.99,  d: 0.30 }, // F#5
-      { f: 830.61,  d: 0.30 }, // G#5
-
-      { f: 1108.73, d: 0.15 }, // C#6
-      { f: 987.77,  d: 0.15 }, // B5
-      { f: 554.37,  d: 0.30 }, // C#5
-      { f: 659.25,  d: 0.30 }, // E5
-
-      { f: 987.77,  d: 0.15 }, // B5
-      { f: 880.00,  d: 0.15 }, // A5
-      { f: 493.88,  d: 0.30 }, // D#5
-      { f: 659.25,  d: 0.30 }, // E5
-
-      { f: 880.00,  d: 0.60 }  // A5
+      { f: 1318.51, d: 0.12 }, { f: 1174.66, d: 0.12 }, { f: 739.99,  d: 0.25 }, { f: 830.61,  d: 0.25 },
+      { f: 1108.73, d: 0.12 }, { f: 987.77,  d: 0.12 }, { f: 554.37,  d: 0.25 }, { f: 659.25,  d: 0.25 },
+      { f: 987.77,  d: 0.12 }, { f: 880.00,  d: 0.12 }, { f: 493.88,  d: 0.25 }, { f: 659.25,  d: 0.25 },
+      { f: 880.00,  d: 0.50 }
     ];
 
-    let now = this.ctx ? this.ctx.currentTime : 0;
+    let delay = 0;
     notes.forEach(note => {
       setTimeout(() => {
-        this.playTone(note.f, 'square', note.d, 0.25);
-      }, now * 1000);
-      now += note.d * 1.05;
+        this.playTone(note.f, 'square', note.d, 0.2);
+      }, delay);
+      delay += note.d * 1050;
     });
   }
 
-  /* Game Sound Effects */
   playEatSFX() {
     this.playTone(600, 'square', 0.04, 0.2);
     setTimeout(() => this.playTone(900, 'square', 0.06, 0.25), 40);
@@ -101,13 +76,8 @@ class NokiaAudio {
     setTimeout(() => this.playTone(150, 'sawtooth', 0.25, 0.3), 120);
   }
 
-  playShootSFX() {
-    this.playTone(1400, 'square', 0.04, 0.15);
-  }
-
-  playHitSFX() {
-    this.playTone(200, 'triangle', 0.08, 0.25);
-  }
+  playShootSFX() { this.playTone(1400, 'square', 0.04, 0.15); }
+  playHitSFX() { this.playTone(200, 'triangle', 0.08, 0.25); }
 
   playBounceSFX() {
     this.playTone(400, 'sine', 0.08, 0.25);
@@ -119,9 +89,7 @@ class NokiaAudio {
     setTimeout(() => this.playTone(1500, 'square', 0.08, 0.2), 60);
   }
 
-  playRotateSFX() {
-    this.playTone(800, 'square', 0.03, 0.12);
-  }
+  playRotateSFX() { this.playTone(800, 'square', 0.03, 0.12); }
 }
 
 window.nokiaAudio = new NokiaAudio();

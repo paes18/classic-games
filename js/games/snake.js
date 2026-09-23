@@ -1,4 +1,4 @@
-/* Snake II Classic Nokia Game */
+/* Snake II Classic Nokia Game - Bug Free */
 
 class SnakeGame {
   constructor(canvas, onGameOver) {
@@ -25,21 +25,26 @@ class SnakeGame {
     this.bonusFood = null;
     this.bonusTimer = 0;
     this.score = 0;
-    this.speed = 120;
-    this.lastTime = 0;
+    this.moveTimer = 0;
+    this.moveSpeed = 100; // ms
+    this.lastTime = performance.now();
     this.gameOver = false;
-    this.paused = false;
   }
 
   spawnFood() {
     let food;
-    while (!food || this.snake.some(s => s.x === food.x && s.y === food.y)) {
+    let attempts = 0;
+    while (attempts < 100) {
       food = {
         x: Math.floor(Math.random() * (this.cols - 2)) + 1,
         y: Math.floor(Math.random() * (this.rows - 2)) + 1
       };
+      if (!this.snake.some(s => s.x === food.x && s.y === food.y)) {
+        return food;
+      }
+      attempts++;
     }
-    return food;
+    return { x: 1, y: 1 };
   }
 
   spawnBonus() {
@@ -47,38 +52,41 @@ class SnakeGame {
       x: Math.floor(Math.random() * (this.cols - 2)) + 1,
       y: Math.floor(Math.random() * (this.rows - 2)) + 1
     };
-    this.bonusTimer = 50; // frames
+    this.bonusTimer = 60;
   }
 
   handleInput(key) {
     if (this.gameOver) return;
-    if (key === 'UP' || key === '2') {
+    if (key === 'UP' || key === '2' || key === 'w') {
       if (this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
-    } else if (key === 'DOWN' || key === '8') {
+    } else if (key === 'DOWN' || key === '8' || key === 's') {
       if (this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
-    } else if (key === 'LEFT' || key === '4') {
+    } else if (key === 'LEFT' || key === '4' || key === 'a') {
       if (this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
-    } else if (key === 'RIGHT' || key === '6') {
+    } else if (key === 'RIGHT' || key === '6' || key === 'd') {
       if (this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
     }
   }
 
-  update(dt) {
-    if (this.gameOver || this.paused) return;
+  update(timestamp = performance.now()) {
+    if (this.gameOver) return;
 
-    this.dir = this.nextDir;
+    if (timestamp - this.lastTime < this.moveSpeed) return;
+    this.lastTime = timestamp;
+
+    this.dir = { ...this.nextDir };
     const head = {
       x: this.snake[0].x + this.dir.x,
       y: this.snake[0].y + this.dir.y
     };
 
-    // Wall Wraparound (Nokia Snake II Feature)
+    // Wall Wraparound (Snake II Mode)
     if (head.x < 0) head.x = this.cols - 1;
     if (head.x >= this.cols) head.x = 0;
     if (head.y < 0) head.y = this.rows - 1;
     if (head.y >= this.rows) head.y = 0;
 
-    // Self Collision Check
+    // Self Collision
     if (this.snake.some(s => s.x === head.x && s.y === head.y)) {
       this.gameOver = true;
       window.nokiaAudio.playDieSFX();
@@ -88,13 +96,13 @@ class SnakeGame {
 
     this.snake.unshift(head);
 
-    // Eat Normal Food
+    // Eat Food
     if (head.x === this.food.x && head.y === this.food.y) {
       this.score += 10;
       window.nokiaAudio.playEatSFX();
       this.food = this.spawnFood();
 
-      if (Math.random() < 0.25 && !this.bonusFood) {
+      if (Math.random() < 0.3 && !this.bonusFood) {
         this.spawnBonus();
       }
     } else if (this.bonusFood && head.x === this.bonusFood.x && head.y === this.bonusFood.y) {
@@ -105,7 +113,6 @@ class SnakeGame {
       this.snake.pop();
     }
 
-    // Bonus timer countdown
     if (this.bonusFood) {
       this.bonusTimer--;
       if (this.bonusTimer <= 0) this.bonusFood = null;
@@ -116,12 +123,10 @@ class SnakeGame {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Draw Outer Border
     ctx.strokeStyle = pixelColor;
     ctx.lineWidth = 2;
     ctx.strokeRect(1, 1, this.canvas.width - 2, this.canvas.height - 2);
 
-    // Draw Snake
     ctx.fillStyle = pixelColor;
     this.snake.forEach((seg, i) => {
       ctx.fillRect(
@@ -130,7 +135,6 @@ class SnakeGame {
         this.gridSize - 2,
         this.gridSize - 2
       );
-      // Detail on head
       if (i === 0) {
         ctx.fillStyle = bgColor;
         ctx.fillRect(
@@ -143,7 +147,7 @@ class SnakeGame {
       }
     });
 
-    // Draw Food (Classic Dot)
+    // Food
     ctx.fillRect(
       this.food.x * this.gridSize + 3,
       this.food.y * this.gridSize + 3,
@@ -151,7 +155,7 @@ class SnakeGame {
       this.gridSize - 6
     );
 
-    // Draw Bonus Insect (Flashing)
+    // Bonus Insect
     if (this.bonusFood && Math.floor(Date.now() / 150) % 2 === 0) {
       ctx.fillRect(
         this.bonusFood.x * this.gridSize + 1,
@@ -161,20 +165,19 @@ class SnakeGame {
       );
     }
 
-    // Score Banner
     ctx.font = '16px "VT323", monospace';
     ctx.fillStyle = pixelColor;
-    ctx.fillText(`SCORE:${this.score}`, 6, 18);
+    ctx.fillText(`SCORE:${this.score}`, 8, 20);
 
     if (this.gameOver) {
       ctx.fillStyle = pixelColor;
-      ctx.fillRect(20, 90, this.canvas.width - 40, 50);
+      ctx.fillRect(20, 110, this.canvas.width - 40, 50);
       ctx.fillStyle = bgColor;
       ctx.font = '20px "VT323", monospace';
       ctx.textAlign = 'center';
-      ctx.fillText('GAME OVER!', this.canvas.width / 2, 115);
+      ctx.fillText('GAME OVER!', this.canvas.width / 2, 132);
       ctx.font = '14px "VT323", monospace';
-      ctx.fillText(`SCORE: ${this.score}`, this.canvas.width / 2, 132);
+      ctx.fillText(`SCORE: ${this.score}`, this.canvas.width / 2, 148);
       ctx.textAlign = 'left';
     }
   }

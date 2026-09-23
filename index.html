@@ -4,147 +4,96 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nokia Classic 8-in-1 Retro Web Games</title>
-  <meta name="description" content="Koleksi Game Klasik HP Nokia 3310 & 6600 Jadul Lengkap: Snake II, Space Impact, Bounce, Rapid Roll, Tetris, Pocket Racer, Tic-Tac-Toe, dan Memory Match.">
+  <meta name="description" content="Koleksi Game Klasik HP Nokia Jadul: Snake II, Space Impact, Bounce, Rapid Roll, Tetris, Pocket Racer, Tic-Tac-Toe, dan Memory Match.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Developer Credit Tag in Top Right Corner -->
-  <div class="developer-credit">
-    <span>by : paes</span>
-  </div>
+  <!-- Developer Branding Tag (Top Right Corner) -->
+  <div class="developer-credit">by : paes</div>
 
   <!-- Header Banner -->
   <header class="app-header">
     <h1 class="app-title">NOKIA <span>RETRO</span> ARCADE</h1>
-    <p class="app-subtitle">📱 8 Classic Games • 3D Nokia Phone Simulator • Audio Synth & PC/Mobile Support</p>
+    <p class="app-subtitle">🎮 8 Game Klasik • Kontrol Tombol Touch & Keyboard PC</p>
   </header>
 
-  <!-- Main Container -->
-  <main class="main-wrapper">
+  <!-- Main Arcade Container -->
+  <main class="arcade-container">
 
-    <!-- NOKIA PHONE 3D CASING SHELL -->
-    <div class="nokia-phone-container">
-      <div class="nokia-phone" id="nokiaPhone">
-        
-        <div class="earpiece"></div>
-        <div class="nokia-brand">NOKIA</div>
+    <!-- GAME CANVAS SCREEN HOUSING (No Phone Shell) -->
+    <div class="screen-housing">
+      <div class="screen-bezel">
 
-        <!-- LCD SCREEN HOUSING -->
-        <div class="screen-housing">
-          <div class="screen-bezel">
-
-            <!-- LCD Status Bar -->
-            <div class="lcd-status-bar">
-              <div class="status-left">
-                <div class="signal-bars">
-                  <span style="height:4px"></span>
-                  <span style="height:6px"></span>
-                  <span style="height:8px"></span>
-                  <span style="height:10px"></span>
-                </div>
-                <span>TELKOMSEL</span>
-              </div>
-              <div class="status-right">
-                <span id="phoneClock">12:00</span>
-                <div class="battery-bars">
-                  <span style="height:10px"></span>
-                  <span style="height:10px"></span>
-                  <span style="height:10px"></span>
-                </div>
-              </div>
+        <!-- LCD Status Bar -->
+        <div class="lcd-status-bar">
+          <div class="status-left">
+            <div class="signal-bars">
+              <span style="height:4px"></span>
+              <span style="height:6px"></span>
+              <span style="height:8px"></span>
+              <span style="height:10px"></span>
             </div>
-
-            <!-- VIEWPORT SCREEN AREA -->
-            <div class="screen-viewport">
-
-              <!-- Canvas for Games -->
-              <canvas id="gameCanvas"></canvas>
-
-              <!-- Startup Handshake Screen -->
-              <div class="nokia-screen startup-screen" id="startupScreen">
-                <div class="hands-anim">🤝</div>
-                <div style="font-size:1.4rem; font-weight:bold;">NOKIA</div>
-                <div style="font-size:0.9rem; margin-top:4px;">Connecting People</div>
-              </div>
-
-              <!-- Main Menu Screen -->
-              <div class="nokia-screen" id="menuScreen">
-                <div class="menu-header">GAMES MENU</div>
-                <div class="menu-list" id="menuList">
-                  <!-- Populated dynamically via JS -->
-                </div>
-                <div class="soft-keys-label">
-                  <span>SELECT</span>
-                  <span>EXIT</span>
-                </div>
-              </div>
-
-              <!-- Ringtone Composer Screen -->
-              <div class="nokia-screen" id="composerScreen">
-                <div class="menu-header">COMPOSER</div>
-                <div style="font-size:0.9rem; margin-bottom:4px;">Tekan nada untuk membuat melodi:</div>
-                <div class="composer-notes" id="composerNotes">E6 D6 F#5 G#5 </div>
-                <div style="margin-top:auto; font-size:0.9rem; text-align:center;">Tekan [C / Back] untuk kembali</div>
-              </div>
-
-              <!-- Leaderboard High Scores Screen -->
-              <div class="nokia-screen" id="scoresScreen">
-                <div class="menu-header">HALL OF FAME</div>
-                <div class="score-list" id="scoreListContainer">
-                  <!-- Populated dynamically via JS -->
-                </div>
-              </div>
-
-              <!-- Settings Screen -->
-              <div class="nokia-screen" id="settingsScreen">
-                <div class="menu-header">SETTINGS</div>
-                <div style="font-size:1rem; padding:10px;">
-                  <div>🔊 Audio: Web Audio Synth</div>
-                  <div>📱 Model: Nokia 3310</div>
-                  <div>⚡ FPS: 60 Fast</div>
-                  <div style="margin-top:10px; font-size:0.85rem; color:inherit;">Pilih warna backlight di panel samping.</div>
-                </div>
-              </div>
-
+            <span>TELKOMSEL</span>
+          </div>
+          <div class="status-right">
+            <span id="phoneClock">12:00</span>
+            <div class="battery-bars">
+              <span style="height:10px"></span>
+              <span style="height:10px"></span>
+              <span style="height:10px"></span>
             </div>
-
           </div>
         </div>
 
-        <!-- NOKIA PHYSICAL KEYPAD CONTROLS -->
-        <div class="keypad-container">
+        <!-- SCREEN VIEWPORT -->
+        <div class="screen-viewport">
 
-          <!-- Soft Keys Row -->
-          <div class="soft-keys-row">
-            <button class="nokia-btn btn-soft select-btn" data-key="SELECT" id="btnSoftLeft">OPTION</button>
-            
-            <!-- D-PAD Navigation Button -->
-            <div class="dpad-container">
-              <button class="dpad-btn dpad-up" data-key="UP">▲</button>
-              <button class="dpad-btn dpad-left" data-key="LEFT">◄</button>
-              <button class="dpad-btn dpad-center" data-key="SELECT">OK</button>
-              <button class="dpad-btn dpad-right" data-key="RIGHT">►</button>
-              <button class="dpad-btn dpad-down" data-key="DOWN">▼</button>
-            </div>
+          <!-- Canvas for Games -->
+          <canvas id="gameCanvas"></canvas>
 
-            <button class="nokia-btn btn-soft" data-key="BACK" id="btnSoftRight">BACK / C</button>
+          <!-- Startup Handshake Screen -->
+          <div class="nokia-screen startup-screen" id="startupScreen">
+            <div class="hands-anim">🤝</div>
+            <div style="font-size:1.5rem; font-weight:bold;">NOKIA</div>
+            <div style="font-size:0.95rem; margin-top:4px;">Connecting People</div>
           </div>
 
-          <!-- Numeric Keypad Grid -->
-          <div class="numpad-grid">
-            <button class="nokia-btn btn-num" data-key="1"><span class="num">1</span><span class="sub">. , ?</span></button>
-            <button class="nokia-btn btn-num" data-key="2"><span class="num">2</span><span class="sub">ABC ▲</span></button>
-            <button class="nokia-btn btn-num" data-key="3"><span class="num">3</span><span class="sub">DEF</span></button>
-            <button class="nokia-btn btn-num" data-key="4"><span class="num">4</span><span class="sub">GHI ◄</span></button>
-            <button class="nokia-btn btn-num" data-key="5"><span class="num">5</span><span class="sub">JKL OK</span></button>
-            <button class="nokia-btn btn-num" data-key="6"><span class="num">6</span><span class="sub">MNO ►</span></button>
-            <button class="nokia-btn btn-num" data-key="7"><span class="num">7</span><span class="sub">PQRS</span></button>
-            <button class="nokia-btn btn-num" data-key="8"><span class="num">8</span><span class="sub">TUV ▼</span></button>
-            <button class="nokia-btn btn-num" data-key="9"><span class="num">9</span><span class="sub">WXYZ</span></button>
-            <button class="nokia-btn btn-num" data-key="*"><span class="num">*</span><span class="sub">+</span></button>
-            <button class="nokia-btn btn-num" data-key="0"><span class="num">0</span><span class="sub">_</span></button>
-            <button class="nokia-btn btn-num" data-key="#"><span class="num">#</span><span class="sub">⇧</span></button>
+          <!-- Main Menu Screen -->
+          <div class="nokia-screen" id="menuScreen">
+            <div class="menu-header">GAMES MENU</div>
+            <div class="menu-list" id="menuList">
+              <!-- Populated dynamically via JS -->
+            </div>
+            <div class="soft-keys-label">
+              <span>SELECT [OK]</span>
+              <span>EXIT [C]</span>
+            </div>
+          </div>
+
+          <!-- Ringtone Composer Screen -->
+          <div class="nokia-screen" id="composerScreen">
+            <div class="menu-header">COMPOSER</div>
+            <div style="font-size:0.95rem; margin-bottom:4px;">Klik nada untuk mainkan nada dering:</div>
+            <div style="font-size:1.2rem; background:rgba(0,0,0,0.1); padding:8px; border-radius:4px; font-weight:bold;">E6 D6 F#5 G#5 C#6 B5</div>
+          </div>
+
+          <!-- Leaderboard High Scores Screen -->
+          <div class="nokia-screen" id="scoresScreen">
+            <div class="menu-header">HALL OF FAME</div>
+            <div class="menu-list" id="scoreListContainer">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Settings Screen -->
+          <div class="nokia-screen" id="settingsScreen">
+            <div class="menu-header">SETTINGS</div>
+            <div style="font-size:1.05rem; padding:10px;">
+              <div>🔊 Audio: Web Audio Synth</div>
+              <div>⚡ Canvas FPS: 60 Fast</div>
+              <div>🎨 Theme: Ubah di bawah</div>
+            </div>
           </div>
 
         </div>
@@ -152,59 +101,46 @@
       </div>
     </div>
 
-    <!-- SIDE PANEL CONTROLS & INSTRUCTIONS -->
-    <aside class="side-panel">
-
-      <!-- Backlight Theme Picker Section -->
-      <div class="panel-section">
-        <h2 class="panel-title">🎨 NOKIA LCD BACKLIGHT THEME</h2>
-        <div class="theme-options">
-          <button class="theme-btn active" data-theme="green">
-            <span class="theme-preview preview-green"></span> 3310 Green
-          </button>
-          <button class="theme-btn" data-theme="color">
-            <span class="theme-preview preview-color"></span> 6600 Color
-          </button>
-          <button class="theme-btn" data-theme="amber">
-            <span class="theme-preview preview-amber"></span> Amber LED
-          </button>
-          <button class="theme-btn" data-theme="ngage">
-            <span class="theme-preview preview-ngage"></span> N-Gage Cyber
-          </button>
-        </div>
+    <!-- CLEAN MODERN TOUCH CONTROLLER (No Nokia Shell) -->
+    <div class="controls-housing">
+      
+      <!-- D-Pad Navigation Buttons -->
+      <div class="dpad-cross">
+        <button class="ctrl-btn btn-up" data-key="UP">▲</button>
+        <button class="ctrl-btn btn-left" data-key="LEFT">◄</button>
+        <button class="ctrl-btn btn-right" data-key="RIGHT">►</button>
+        <button class="ctrl-btn btn-down" data-key="DOWN">▼</button>
       </div>
 
-      <!-- PC & Mobile Control Guide Section -->
-      <div class="panel-section">
-        <h2 class="panel-title">🎮 KEYBOARD & TOUCH CONTROLS</h2>
-        <div class="controls-guide">
-          <div><span class="key-badge">⬆ ⬇ ⬅ ➡ / WASD</span> Arah D-Pad</div>
-          <div><span class="key-badge">2, 4, 6, 8</span> Numpad Arah</div>
-          <div><span class="key-badge">Enter / Space</span> Tombol OK / Tembak</div>
-          <div><span class="key-badge">Backspace / Esc</span> Kembali / Keluar</div>
-          <div><span class="key-badge">Touch Button</span> Sentuh Tombol HP</div>
-          <div><span class="key-badge">Vibration</span> Haptic Touch HP</div>
-        </div>
+      <!-- Action Buttons (OK / Select & Back) -->
+      <div class="action-buttons">
+        <button class="ctrl-btn btn-action btn-select" data-key="SELECT">OK / START</button>
+        <button class="ctrl-btn btn-action btn-back" data-key="BACK">BACK / EXIT</button>
       </div>
 
-      <!-- Monophonic Ringtone Composer Section -->
-      <div class="panel-section">
-        <h2 class="panel-title">🎵 MONOPHONIC RINGTONE COMPOSER</h2>
-        <div class="composer-box">
-          <div class="composer-keys">
-            <button class="note-btn" data-note="C5" data-freq="523.25">C5</button>
-            <button class="note-btn" data-note="D5" data-freq="587.33">D5</button>
-            <button class="note-btn" data-note="E5" data-freq="659.25">E5</button>
-            <button class="note-btn" data-note="F5" data-freq="698.46">F5</button>
-            <button class="note-btn" data-note="G5" data-freq="783.99">G5</button>
-            <button class="note-btn" data-note="A5" data-freq="880.00">A5</button>
-            <button class="note-btn" data-note="B5" data-freq="987.77">B5</button>
-          </div>
-          <button class="theme-btn" id="clearNotesBtn" style="margin-top:4px; justify-content:center;">Hapus Nada Dering</button>
-        </div>
+    </div>
+
+    <!-- BOTTOM PANEL: THEME PICKER & KEYBOARD LEGEND -->
+    <div class="bottom-panel">
+      <div class="theme-options">
+        <button class="theme-btn active" data-theme="green">
+          <span class="theme-dot dot-green"></span> 3310
+        </button>
+        <button class="theme-btn" data-theme="color">
+          <span class="theme-dot dot-color"></span> Color
+        </button>
+        <button class="theme-btn" data-theme="amber">
+          <span class="theme-dot dot-amber"></span> Amber
+        </button>
+        <button class="theme-btn" data-theme="ngage">
+          <span class="theme-dot dot-ngage"></span> N-Gage
+        </button>
       </div>
 
-    </aside>
+      <div class="kb-hint">
+        Keyboard PC: <span>Panah / WASD</span> (Navigasi) • <span>Enter / Space</span> (OK) • <span>Esc / Backspace</span> (Kembali)
+      </div>
+    </div>
 
   </main>
 

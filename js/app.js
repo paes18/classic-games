@@ -1,23 +1,23 @@
-/* Nokia Retro Operating System & Application Manager */
+/* Nokia Retro Operating System & Application Manager - Bug Free */
 
 class NokiaApp {
   constructor() {
     this.canvas = document.getElementById('gameCanvas');
     this.ctx = this.canvas.getContext('2d');
 
-    // Canvas native size (LCD grid 280x280)
-    this.canvas.width = 280;
-    this.canvas.height = 280;
+    // Canvas native LCD size (340x340)
+    this.canvas.width = 340;
+    this.canvas.height = 340;
 
     this.currentTheme = 'green';
     this.themeColors = {
       green: { bg: '#97ba30', pixel: '#1a3409' },
-      color: { bg: '#121826', pixel: '#38bdf8' },
+      color: { bg: '#0f172a', pixel: '#38bdf8' },
       amber: { bg: '#ff9900', pixel: '#2b1400' },
       ngage: { bg: '#090d16', pixel: '#10b981' }
     };
 
-    this.activeScreen = 'menu'; // 'home', 'menu', 'game', 'composer', 'scores', 'settings'
+    this.activeScreen = 'menu';
     this.menuIndex = 0;
 
     this.games = [
@@ -29,7 +29,6 @@ class NokiaApp {
       { id: 'racer', name: 'Pocket Racer', icon: '🏎️' },
       { id: 'tictactoe', name: 'Tic-Tac-Toe', icon: '❌' },
       { id: 'memory', name: 'Memory Pairs', icon: '🎴' },
-      { id: 'composer', name: 'Nokia Composer', icon: '🎵' },
       { id: 'scores', name: 'High Scores', icon: '🏆' },
       { id: 'settings', name: 'Phone Settings', icon: '⚙️' }
     ];
@@ -82,7 +81,7 @@ class NokiaApp {
       setTimeout(() => {
         startup.classList.remove('active');
         this.openMenu();
-      }, 2500);
+      }, 2000);
     } else {
       this.openMenu();
     }
@@ -96,7 +95,6 @@ class NokiaApp {
   }
 
   renderMenu() {
-    const screen = document.getElementById('menuScreen');
     const menuList = document.getElementById('menuList');
     if (!menuList) return;
 
@@ -112,7 +110,6 @@ class NokiaApp {
       menuList.appendChild(div);
     });
 
-    // Auto scroll selected into view
     const selectedEl = menuList.children[this.menuIndex];
     if (selectedEl) {
       selectedEl.scrollIntoView({ block: 'nearest' });
@@ -123,9 +120,7 @@ class NokiaApp {
     window.nokiaAudio.playSelectBeep();
     const item = this.games[this.menuIndex];
 
-    if (item.id === 'composer') {
-      this.activeScreen = 'composer';
-    } else if (item.id === 'scores') {
+    if (item.id === 'scores') {
       this.activeScreen = 'scores';
     } else if (item.id === 'settings') {
       this.activeScreen = 'settings';
@@ -171,28 +166,28 @@ class NokiaApp {
   handleInput(key) {
     this.triggerHaptic();
 
-    if (key === 'BACK' || key === 'c' || key === 'Escape' || key === 'Backspace') {
+    if (key === 'BACK' || key === 'Escape' || key === 'Backspace') {
       window.nokiaAudio.playBackBeep();
-      if (this.activeScreen === 'game' || this.activeScreen === 'composer' || this.activeScreen === 'scores' || this.activeScreen === 'settings') {
+      if (this.activeScreen === 'game' || this.activeScreen === 'scores' || this.activeScreen === 'settings') {
         this.openMenu();
         return;
       }
     }
 
     if (this.activeScreen === 'menu') {
-      if (key === 'UP' || key === '2') {
+      if (key === 'UP' || key === 'w') {
         this.menuIndex = (this.menuIndex - 1 + this.games.length) % this.games.length;
         window.nokiaAudio.playKeyBeep();
         this.renderMenu();
-      } else if (key === 'DOWN' || key === '8') {
+      } else if (key === 'DOWN' || key === 's') {
         this.menuIndex = (this.menuIndex + 1) % this.games.length;
         window.nokiaAudio.playKeyBeep();
         this.renderMenu();
-      } else if (key === 'SELECT' || key === '5' || key === 'SPACE' || key === 'ENTER') {
+      } else if (key === 'SELECT' || key === 'SPACE' || key === 'ENTER') {
         this.selectMenuItem();
       }
     } else if (this.activeScreen === 'game' && this.currentGame) {
-      if (this.currentGame.gameOver && (key === 'SELECT' || key === '5' || key === 'SPACE' || key === 'ENTER')) {
+      if (this.currentGame.gameOver && (key === 'SELECT' || key === 'SPACE' || key === 'ENTER')) {
         this.currentGame.reset();
         window.nokiaAudio.playSelectBeep();
       } else {
@@ -208,7 +203,6 @@ class NokiaApp {
   }
 
   initEventListeners() {
-    // Keyboard Listeners
     window.addEventListener('keydown', (e) => {
       this.keysPressed[e.key] = true;
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Backspace'].includes(e.key)) {
@@ -231,21 +225,19 @@ class NokiaApp {
       this.keysPressed[e.key] = false;
     });
 
-    // Touch / Click on Buttons
-    document.querySelectorAll('.nokia-btn, .dpad-btn').forEach(btn => {
+    // Touch and Mouse button handlers
+    document.querySelectorAll('.ctrl-btn').forEach(btn => {
       const key = btn.dataset.key;
-      btn.addEventListener('mousedown', (e) => {
+      const handlePress = (e) => {
         e.preventDefault();
         btn.classList.add('pressed');
         if (key) this.handleInput(key);
-      });
-      btn.addEventListener('mouseup', () => btn.classList.remove('pressed'));
-      btn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        btn.classList.add('pressed');
-        if (key) this.handleInput(key);
-      });
-      btn.addEventListener('touchend', () => btn.classList.remove('pressed'));
+      };
+      const handleRelease = () => btn.classList.remove('pressed');
+
+      btn.addEventListener('pointerdown', handlePress);
+      btn.addEventListener('pointerup', handleRelease);
+      btn.addEventListener('pointerleave', handleRelease);
     });
 
     // Theme Switcher Buttons
@@ -256,25 +248,6 @@ class NokiaApp {
         this.setTheme(btn.dataset.theme);
       });
     });
-
-    // Composer Key Buttons
-    document.querySelectorAll('.note-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const freq = parseFloat(btn.dataset.freq);
-        const note = btn.dataset.note;
-        window.nokiaAudio.playTone(freq, 'square', 0.2, 0.3);
-        const notesBox = document.getElementById('composerNotes');
-        if (notesBox) notesBox.textContent += `${note} `;
-      });
-    });
-
-    const clearBtn = document.getElementById('clearNotesBtn');
-    if (clearBtn) {
-      clearBtn.addEventListener('click', () => {
-        const notesBox = document.getElementById('composerNotes');
-        if (notesBox) notesBox.textContent = '';
-      });
-    }
   }
 
   setTheme(themeName) {
@@ -306,14 +279,11 @@ class NokiaApp {
   render() {
     const theme = this.themeColors[this.currentTheme];
 
-    // Toggle Screen Views
     const menuScreen = document.getElementById('menuScreen');
-    const composerScreen = document.getElementById('composerScreen');
     const scoresScreen = document.getElementById('scoresScreen');
     const settingsScreen = document.getElementById('settingsScreen');
 
     if (menuScreen) menuScreen.classList.toggle('active', this.activeScreen === 'menu');
-    if (composerScreen) composerScreen.classList.toggle('active', this.activeScreen === 'composer');
     if (scoresScreen) scoresScreen.classList.toggle('active', this.activeScreen === 'scores');
     if (settingsScreen) settingsScreen.classList.toggle('active', this.activeScreen === 'settings');
 
@@ -328,11 +298,11 @@ class NokiaApp {
 
     container.innerHTML = '';
     this.games.forEach(g => {
-      if (['composer', 'scores', 'settings'].includes(g.id)) return;
+      if (['scores', 'settings'].includes(g.id)) return;
       const score = this.highScores[g.id] || 0;
       const row = document.createElement('div');
-      row.className = 'score-row';
-      row.innerHTML = `<span class="score-game">${g.icon} ${g.name}</span><span class="score-val">${score}</span>`;
+      row.className = 'menu-item';
+      row.innerHTML = `<span>${g.icon} ${g.name}</span><span style="margin-left:auto; font-weight:bold;">${score}</span>`;
       container.appendChild(row);
     });
   }
