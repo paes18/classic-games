@@ -1,10 +1,11 @@
 /* Space Impact Classic Nokia Game - Bug Free */
 
 class SpaceImpactGame {
-  constructor(canvas, onGameOver) {
+  constructor(canvas, onGameOver, diffMult = 1.0) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.onGameOver = onGameOver;
+    this.diffMult = diffMult;
     this.reset();
   }
 

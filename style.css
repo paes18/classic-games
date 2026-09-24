@@ -451,6 +451,67 @@ canvas#gameCanvas.active {
   font-weight: bold;
 }
 
+/* DIFFICULTY SELECTOR */
+.diff-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.diff-btn {
+  padding: 8px 4px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.diff-btn.active {
+  border-color: #22c55e;
+  background: #15803d;
+  color: #fff;
+}
+
+.diff-btn[data-diff="medium"].active {
+  border-color: #eab308;
+  background: #a16207;
+}
+
+.diff-btn[data-diff="hard"].active {
+  border-color: #f43f5e;
+  background: #be123c;
+}
+
+/* WHATSAPP ADMIN CONTACT BUTTON */
+.admin-wa-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(145deg, #25d366, #128c7e);
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: all 0.2s ease;
+  margin-top: 6px;
+}
+
+.admin-wa-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+  background: linear-gradient(145deg, #28e06c, #149c8c);
+}
+
 /* Keyframe Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.96); }

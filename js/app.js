@@ -39,6 +39,8 @@ class NokiaApp {
     this.lastFrameTime = 0;
     this.targetFPS = 60;
     this.frameInterval = 1000 / this.targetFPS;
+    this.difficulty = 'easy'; // Default to Easy mode
+    this.diffMultipliers = { easy: 1.4, medium: 1.0, hard: 0.7 };
 
     this.initClock();
     this.initEventListeners();
@@ -144,34 +146,35 @@ class NokiaApp {
     this.canvas.classList.add('active');
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    const mult = this.diffMultipliers[this.difficulty] || 1.0;
     const onOver = (score) => {
       this.saveScore(gameId, score);
     };
 
     switch (gameId) {
       case 'snake':
-        this.currentGame = new SnakeGame(this.canvas, onOver);
+        this.currentGame = new SnakeGame(this.canvas, onOver, mult);
         break;
       case 'space-impact':
-        this.currentGame = new SpaceImpactGame(this.canvas, onOver);
+        this.currentGame = new SpaceImpactGame(this.canvas, onOver, mult);
         break;
       case 'bounce':
-        this.currentGame = new BounceGame(this.canvas, onOver);
+        this.currentGame = new BounceGame(this.canvas, onOver, mult);
         break;
       case 'rapid-roll':
-        this.currentGame = new RapidRollGame(this.canvas, onOver);
+        this.currentGame = new RapidRollGame(this.canvas, onOver, mult);
         break;
       case 'stacker':
-        this.currentGame = new StackerGame(this.canvas, onOver);
+        this.currentGame = new StackerGame(this.canvas, onOver, mult);
         break;
       case 'racer':
-        this.currentGame = new RacerGame(this.canvas, onOver);
+        this.currentGame = new RacerGame(this.canvas, onOver, mult);
         break;
       case 'tictactoe':
-        this.currentGame = new TicTacToeGame(this.canvas, onOver);
+        this.currentGame = new TicTacToeGame(this.canvas, onOver, mult);
         break;
       case 'memory':
-        this.currentGame = new MemoryGame(this.canvas, onOver);
+        this.currentGame = new MemoryGame(this.canvas, onOver, mult);
         break;
     }
   }
@@ -257,6 +260,15 @@ class NokiaApp {
         document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.setTheme(btn.dataset.theme);
+      });
+    });
+
+    document.querySelectorAll('.diff-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.difficulty = btn.dataset.diff;
+        window.nokiaAudio.playSelectBeep();
       });
     });
   }

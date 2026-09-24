@@ -89,10 +89,11 @@
           <!-- Settings Screen -->
           <div class="nokia-screen" id="settingsScreen">
             <div class="menu-header">SETTINGS</div>
-            <div style="font-size:1.05rem; padding:10px;">
+            <div style="font-size:1rem; padding:6px; display:flex; flex-direction:column; gap:6px;">
               <div>🔊 Audio: Web Audio Synth</div>
               <div>⚡ Canvas FPS: 60 Fast</div>
-              <div>🎨 Theme: Ubah di bawah</div>
+              <div>🎯 Mode: Easy / Med / Hard</div>
+              <a href="https://wa.me/6282345715727?text=Halo%20Admin%20Paes,%20saya%20ada%20kendala%20di%20Web%20Game%20Nokia" target="_blank" class="admin-wa-btn" style="margin-top:8px;">💬 Contact Admin WhatsApp</a>
             </div>
           </div>
 
@@ -120,8 +121,16 @@
 
     </div>
 
-    <!-- BOTTOM PANEL: THEME PICKER & KEYBOARD LEGEND -->
+    <!-- BOTTOM PANEL: DIFFICULTY, THEME PICKER & WHATSAPP ADMIN -->
     <div class="bottom-panel">
+      <!-- Difficulty Mode Selector -->
+      <div class="diff-options">
+        <button class="diff-btn active" data-diff="easy">MODE EASY</button>
+        <button class="diff-btn" data-diff="medium">MEDIUM</button>
+        <button class="diff-btn" data-diff="hard">HARD</button>
+      </div>
+
+      <!-- Theme Selector -->
       <div class="theme-options">
         <button class="theme-btn active" data-theme="green">
           <span class="theme-dot dot-green"></span> 3310
@@ -136,6 +145,11 @@
           <span class="theme-dot dot-ngage"></span> N-Gage
         </button>
       </div>
+
+      <!-- WhatsApp Support Button -->
+      <a href="https://wa.me/6282345715727?text=Halo%20Admin%20Paes,%20saya%20ada%20kendala%20di%20Web%20Game%20Nokia" target="_blank" class="admin-wa-btn">
+        💬 Laporkan Kendala / Chat Admin WA (082345715727)
+      </a>
 
       <div class="kb-hint">
         Keyboard PC: <span>Panah / WASD</span> (Navigasi) • <span>Enter / Space</span> (OK) • <span>Esc / Backspace</span> (Kembali)

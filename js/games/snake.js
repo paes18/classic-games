@@ -1,10 +1,11 @@
 /* Snake II Classic Nokia Game - Bug Free */
 
 class SnakeGame {
-  constructor(canvas, onGameOver) {
+  constructor(canvas, onGameOver, diffMult = 1.0) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.onGameOver = onGameOver;
+    this.diffMult = diffMult;
 
     this.gridSize = 14;
     this.cols = Math.floor(canvas.width / this.gridSize);
@@ -26,7 +27,7 @@ class SnakeGame {
     this.bonusTimer = 0;
     this.score = 0;
     this.moveTimer = 0;
-    this.moveSpeed = 150; // ms (classic comfortable speed)
+    this.moveSpeed = 150 * this.diffMult; // ms (scaled by difficulty)
     this.lastTime = performance.now();
     this.gameOver = false;
   }
