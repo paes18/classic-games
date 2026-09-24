@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <rect width="512" height="512" rx="120" fill="#0f172a"/>
+  
+  <!-- Controller Cable -->
+  <path d="M256 180 V100 Q256 60 300 60 H340" fill="none" stroke="#334155" stroke-width="16" stroke-linecap="round"/>
+  
+  <!-- Controller Body Frame -->
+  <rect x="76" y="180" width="360" height="200" rx="36" fill="#cbd5e1" stroke="#475569" stroke-width="12"/>
+  <rect x="96" y="200" width="320" height="160" rx="20" fill="#1e293b"/>
+  
+  <!-- D-PAD Cross -->
+  <path d="M160 230 H190 V260 H220 V290 H190 V320 H160 V290 H130 V260 H160 Z" fill="#475569" stroke="#0f172a" stroke-width="4"/>
+  <circle cx="175" cy="275" r="8" fill="#0f172a"/>
+  
+  <!-- Center Vent Lines -->
+  <rect x="236" y="240" width="40" height="8" rx="4" fill="#475569"/>
+  <rect x="236" y="260" width="40" height="8" rx="4" fill="#475569"/>
+  <rect x="236" y="280" width="40" height="8" rx="4" fill="#475569"/>
+  
+  <!-- Select/Start Buttons -->
+  <rect x="240" y="310" width="14" height="8" rx="4" fill="#475569"/>
+  <rect x="262" y="310" width="14" height="8" rx="4" fill="#475569"/>
+
+  <!-- Action Red Buttons -->
+  <rect x="300" y="245" width="44" height="60" rx="10" fill="#334155"/>
+  <circle cx="322" cy="275" r="16" fill="#f43f5e"/>
+  
+  <rect x="354" y="245" width="44" height="60" rx="10" fill="#334155"/>
+  <circle cx="376" cy="275" r="16" fill="#f43f5e"/>
+</svg>
